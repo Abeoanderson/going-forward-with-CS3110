@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hw 8 -Activity Notifications </title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script>
+        const ws = new WebSocket("ws://" + window.location.host)
+    
+        ws.onmessage = async (event) => {
+            const data = JSON.parse(event.data)
+            if (data.type === 'new_meal') {
+                // Check if it’s for this user (optional)
+                location.reload() // Refresh the page (or better, just update the DOM)
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <nav>
+        <div class="HW8">HW8</div>
+        <div class="nave-items">
+            <a href="/">home</a>
+            <a href="/login">login</a>
+            <a href="/register">signup</a>
+            <form action="/logout" method="POST" style="display:inline;">
+                <button type="submit">Logout</button>
+            </form>
+        </div>
+    </nav>
+    <section class="main">
+        <div class="main-container">
+            <div class="column-left">
+                <h1>Welcome <%= user %>
+                </h1>
+                <p>food today:</p>
+                <ul>
+                    <% meals.forEach(meal=> { %>
+                        <li>
+                            <%= meal.name %> - <%= meal.cal %> cal
+                        </li>
+                        <% }) %>
+                </ul>
+                <p><strong>Total Calories: <%= totalCalories %></strong></p>
+            </div>
+        </div>
+        <div class="meal-container">
+            <form action="/meals" method="POST">
+                <label>Meal
+                    <input type="text" name="Meal" />
+                    <input type="number" name="Cal" value="0" />
+                </label>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </section>
+</body>
+
+</html>
