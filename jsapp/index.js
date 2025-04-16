@@ -141,7 +141,7 @@ app.post('/api/meals', (req, res) => {
     })
 })
 
-app.get('/api/meals', (req, res) => {
+app.get('/meals', (req, res) => {
     const user = req.session.user
     if (!user || !user.id) return res.status(401).json({ error: 'Not logged in' })
 

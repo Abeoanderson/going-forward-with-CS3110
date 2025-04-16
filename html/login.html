@@ -4,8 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Login</title>
-    <link rel="stylesheet" href="style.css" />
-</head>
+    <link rel="stylesheet" href="assets/css/style.css" />
 
 <body>
     <nav>
@@ -20,7 +19,8 @@
     <div class="log">
         <h1>Login</h1>
         <br />
-        <form id="login-form">
+        <form id="login-form" method="POST" action="/api/login">
+
             <div>
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" required />
@@ -34,30 +34,6 @@
         </form>
     </div>
 
-    <script>
-        const form = document.getElementById('login-form');
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('name').value;
-            const password = document.getElementById('password').value;
-
-            const res = await fetch('/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name, password }),
-            });
-
-            if (res.ok) {
-                // Optional: redirect to home or dashboard
-                window.location.href = '/';
-            } else {
-                const err = await res.json();
-                alert(err.error || 'Login failed.');
-            }
-        });
-    </script>
+    <script src="assets/js/login.js"></script>
 </body>
 </html>
