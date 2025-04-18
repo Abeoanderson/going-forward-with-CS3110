@@ -1,49 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HW8 - Activity Notifications</title>
-    <link rel="stylesheet" href="assets/css/style.css" /
+  <meta charset="UTF-8">
+  <title>Shake to Win</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 2em;
+      background: #fefefe;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 0.5em;
+    }
+    #count {
+      font-size: 3em;
+      margin: 1em 0;
+    }
+    #message {
+      font-size: 1.5em;
+      color: green;
+      font-weight: bold;
+    }
+    button {
+      padding: 1em 2em;
+      font-size: 1em;
+      margin-top: 2em;
+    }
+  </style>
 </head>
-
 <body>
-    <nav>
-        <div class="HW8">HW8</div>
-        <div class="nave-items">
-            <a href="/">home</a>
-            <a href="/login">login</a>
-            <a href="/register">signup</a>
-            <!-- <button id="register-btn">Signup</button>
-            <button id="login-btn">Login</button> -->
-            <button id="logout-btn" style="display:inline;">Logout</button>
-        </div>
-    </nav>
+  <h1>Shake to Win! 🕺📱</h1>
+  <p>Shake your phone to increase the counter.</p>
+  <div id="count">0</div>
+  <div id="message"></div>
+  <button onclick="resetGame()">Reset</button>
 
-    <section class="main">
-        <div class="main-container">
-            <div class="column-left">
-                <h1 id="welcome-user">Welcome</h1>
-                <p>food today:</p>
-                <ul id="meal-list"></ul>
-                <p><strong>Total Calories: <span id="total-calories">0</span></strong></p>
-            </div>
-        </div>
+  <script>
+    let shakeCount = 0;
+    let lastShakeTime = 0;
+    const threshold = 15; // acceleration threshold
+    const winCount = 20; // how many shakes to win
 
-        <div class="meal-container">
-            <form id="meal-form">
-                <label>Meal
-                    <input type="text" name="Meal" required />
-                    <input type="number" name="Cal" value="0" min="0" required />
-                </label>
-                <button type="submit">Submit</button>
-            </form>
-        </div>
-    </section>
+    if (window.DeviceMotionEvent) {
+      window.addEventListener('devicemotion', (event) => {
+        const { x, y, z } = event.accelerationIncludingGravity;
+        const acc = Math.sqrt(x * x + y * y + z * z);
 
-    <script src="assets/js/index.js"></script>
+        const now = Date.now();
+        if (acc > threshold && (now - lastShakeTime) > 300) {
+          shakeCount++;
+          lastShakeTime = now;
+          document.getElementById('count').innerText = shakeCount;
+
+          if (shakeCount >= winCount) {
+            document.getElementById('message').innerText = '🎉 You Win!';
+            window.navigator.vibrate?.([200, 100, 200]); // optional vibration
+          }
+        }
+      });
+    } else {
+      alert("DeviceMotionEvent is not supported on this device.");
+    }
+
+    function resetGame() {
+      shakeCount = 0;
+      document.getElementById('count').innerText = shakeCount;
+      document.getElementById('message').innerText = '';
+    }
+  </script>
 </body>
-
 </html>
+
